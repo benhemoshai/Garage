@@ -1,0 +1,7 @@
+*.csproj
+*.cache
+.vs/*
+Ex03.GarageLogic/bin/*
+Ex03.GarageLogic/obj/*
+Ex03.ConsoleUI/bin/*
+Ex03.ConsoleUI/obj/*
