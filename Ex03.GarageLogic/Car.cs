@@ -9,7 +9,32 @@ namespace GarageLogic
     public abstract class Car : Vehicle
     {
         private eCarColor m_Color;
-        private eDoors m_NumOfDoors;
+        private eNumOfDoors m_NumOfDoors;
+        
+        public Car(eCarColor i_CarColor, eNumOfDoors i_NumOfDoors) : base()
+        {
+            m_Color = i_CarColor;
+            m_NumOfDoors = i_NumOfDoors;
+
+            Wheels = new Wheel[5];
+            for (int i = 0; i < Wheels.Length; i++)
+            {
+                Wheels[i] = new Wheel(string.Format("Michellin {0}", i), 31f, 31f);
+            }
+        }
+
+        public eCarColor CarColor
+        {
+            get { return m_Color; }
+            set { m_Color = value; }
+        }
+
+        public eNumOfDoors NumOfDoors
+        {
+            get { return this.m_NumOfDoors; }
+            set { this.m_NumOfDoors = value;}
+        }
+
 
         public enum eCarColor
         {
@@ -19,7 +44,7 @@ namespace GarageLogic
            Black
         }
 
-        public enum eDoors
+        public enum eNumOfDoors
         {
            Two = 2,
            Three = 3,

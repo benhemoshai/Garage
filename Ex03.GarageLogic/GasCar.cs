@@ -8,14 +8,11 @@ namespace GarageLogic
 {
     class GasCar : Car, IGasVehicle
     {
-        private string m_ModelName;
-        private string m_LicenseID;
-        private float m_EnergyLeft;
-        private List<Wheel> m_Wheels;
+        public GasCar() 
+        {
+         
+        }
 
-        private eCarColor m_Color;
-        private eDoors m_NumOfDoors;
-        
         public eGasType GasType
         {
             get { return eGasType.Octan95; }
@@ -23,7 +20,7 @@ namespace GarageLogic
 
         public float GetCurrentGasAmount
         {
-            get { return m_EnergyLeft; }
+            get { return EnergyLeft; }
         }
 
         public float GetMaxGasAmount

@@ -14,7 +14,7 @@ namespace GarageLogic
         private List<Wheel> m_Wheels;
 
         private eCarColor m_Color;
-        private eDoors m_NumOfDoors;
+        private eNumOfDoors m_NumOfDoors;
 
         public float GetRemainingBatteryHours
         {
