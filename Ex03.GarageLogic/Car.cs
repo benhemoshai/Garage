@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GarageLogic
 {
-    abstract class Car : Vehicle
+    public abstract class Car : Vehicle
     {
         private eCarColor m_Color;
         private eDoors m_NumOfDoors;

@@ -28,7 +28,7 @@ namespace GarageLogic
 
         public float GetMaxGasAmount
         {
-            get { return 45; }
+            get { return 45f; }
         }
 
         void IGasVehicle.Fuel(float i_GasAmountToAdd, eGasType i_GasType)
