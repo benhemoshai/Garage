@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static GarageLogic.Motorcycle;
+using static Ex03.GarageLogic.Car;
+using static Ex03.GarageLogic.Motorcycle;
+using static Ex03.GarageLogic.Vehicle;
 
-namespace GarageLogic
+namespace Ex03.GarageLogic
 {
     class GasMotorcycle : Motorcycle, IGasVehicle
     {
-        private string m_ModelName;
-        private string m_LicenseID;
-        private float m_EnergyLeft;
-        private List<Wheel> m_Wheels;
-
-        private eLicenseType m_licenseType;
-        private int m_EngineVolume;
-
         public eGasType GasType
         {
             get { return eGasType.Octan98; }
@@ -24,7 +18,7 @@ namespace GarageLogic
 
         public float GetCurrentGasAmount
         {
-            get { return m_EnergyLeft; }
+            get { return EnergyLeftPercents; }
         }
 
         public float GetMaxGasAmount

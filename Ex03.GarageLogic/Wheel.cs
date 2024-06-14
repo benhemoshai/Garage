@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GarageLogic
+namespace Ex03.GarageLogic
 {
     public class Wheel
     {
@@ -32,7 +32,7 @@ namespace GarageLogic
         public float MaxAirPressure
         {
             get { return m_MaxAirPressure; }
-            set { m_MaxAirPressure = value;}
+            set { m_MaxAirPressure = value;} // not sure if we need
         }
         public void Inflate(float i_AmountOfAirPressureToAdd)
         {

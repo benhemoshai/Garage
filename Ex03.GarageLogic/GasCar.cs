@@ -4,15 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GarageLogic
+namespace Ex03.GarageLogic
 {
     class GasCar : Car, IGasVehicle
     {
-        public GasCar() 
-        {
-         
-        }
-
+        
         public eGasType GasType
         {
             get { return eGasType.Octan95; }
@@ -20,7 +16,7 @@ namespace GarageLogic
 
         public float GetCurrentGasAmount
         {
-            get { return EnergyLeft; }
+            get { return EnergyLeftPercents; }
         }
 
         public float GetMaxGasAmount

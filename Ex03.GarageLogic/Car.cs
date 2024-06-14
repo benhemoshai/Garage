@@ -4,22 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GarageLogic
+namespace Ex03.GarageLogic
 {
     public abstract class Car : Vehicle
     {
         private eCarColor m_Color;
         private eNumOfDoors m_NumOfDoors;
-        
-        public Car(eCarColor i_CarColor, eNumOfDoors i_NumOfDoors) : base()
-        {
-            m_Color = i_CarColor;
-            m_NumOfDoors = i_NumOfDoors;
 
+        public Car()
+        {
             Wheels = new Wheel[5];
             for (int i = 0; i < Wheels.Length; i++)
             {
-                Wheels[i] = new Wheel(string.Format("Michellin {0}", i), 31f, 31f);
+                Wheels[i] = new Wheel(string.Format("Michellin {0}", i + 1), 31f, 31f);
             }
         }
 
@@ -32,9 +29,8 @@ namespace GarageLogic
         public eNumOfDoors NumOfDoors
         {
             get { return this.m_NumOfDoors; }
-            set { this.m_NumOfDoors = value;}
+            set { this.m_NumOfDoors = value; }
         }
-
 
         public enum eCarColor
         {

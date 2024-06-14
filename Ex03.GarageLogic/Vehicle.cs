@@ -5,27 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GarageLogic
+namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
         private string m_ModelName;
         private string m_LicenseID;
         private float m_EnergyLeft;
-        private Wheel [] m_Wheels;
+        private Wheel[] m_Wheels;
 
         private string m_Owner;
         private string m_OwnerPhoneNumber;
         private eVehicleStatus m_VehicleStatus;
-
-        public Vehicle(string i_ModelName, string i_LicenseID, string i_Owner, string i_OwnerPhoneNumber, eVehicleStatus i_VehicleStatus)
-        {
-            m_ModelName = i_ModelName;
-            m_LicenseID = i_LicenseID;
-            m_Owner = i_Owner;
-            m_OwnerPhoneNumber = i_OwnerPhoneNumber;
-            m_VehicleStatus = i_VehicleStatus;
-        }
 
         public string ModelName
         {
@@ -39,7 +30,7 @@ namespace GarageLogic
             set { m_LicenseID = value; }
         }
 
-        public float EnergyLeft
+        public float EnergyLeftPercents
         {
             get { return m_EnergyLeft; }
             set { m_EnergyLeft = value; }
@@ -50,7 +41,18 @@ namespace GarageLogic
             get { return m_Wheels; }
             set { m_Wheels = value; }
         }
-        
+
+        public string Owner
+        {
+            get { return m_Owner; }
+            set { m_Owner = value; }
+        }
+        public string OwnerPhoneNumber
+        {
+            get { return m_OwnerPhoneNumber; }
+            set { m_OwnerPhoneNumber = value; }
+        }
+
         public eVehicleStatus VehicleStatus
         {
             get { return m_VehicleStatus; }
@@ -72,12 +74,12 @@ namespace GarageLogic
             {
                 isEqual = m_LicenseID.Equals(((Vehicle)obj).LicenseID);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 isEqual = false;
             }
             return isEqual;
-            
+
         }
     }
 }
