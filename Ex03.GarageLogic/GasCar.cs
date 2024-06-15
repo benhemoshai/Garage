@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
 {
     public class GasCar : GasVehicle
     {
-        private eCarColors m_CarColors;
+        private eCarColors m_CarColor;
         private eNumOfDoors m_NumOfDoors;
         public GasCar()
         {
@@ -16,10 +16,10 @@ namespace Ex03.GarageLogic
             GasType = eGasType.Octan95;
         }
         
-        public eCarColors CarColors
+        public eCarColors CarColor
         {
-            get { return m_CarColors; }
-            set { m_CarColors = value; }
+            get { return m_CarColor; }
+            set { m_CarColor = value; }
         }
 
         public eNumOfDoors NumOfDoors
