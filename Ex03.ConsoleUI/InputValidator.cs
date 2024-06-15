@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
@@ -11,7 +12,7 @@ namespace Ex03.ConsoleUI
         // private const int MENU_CHOICES = 8;
 
 
-        public static int getUserSelection(int i_StepNumber)
+        internal static int getUserSelectionFromMenu(int i_MinValue, int i_MaxValue)
         {
             bool isValidType = false;
             int userSelection = 0;
@@ -21,49 +22,167 @@ namespace Ex03.ConsoleUI
                 try
                 {
                     string userInput = Console.ReadLine();
-                    bool isANumber = int.TryParse(userInput, out userSelection);
-
-                    if (!isANumber)
-                    {
-                        throw new FormatException("Input is not a valid number.");
-                    }
-                    if (i_StepNumber == 1)
-                    {
-                        if (userSelection < 1 || userSelection > 8)
-                        {
-                            throw new ArgumentOutOfRangeException("Invalid selection. Please choose between 1 to 8.");
-                        }
-
-                    }
-                    else if (i_StepNumber == 2)
-                    {
-                        if (userSelection < 1 || userSelection > 5)
-                        {
-                            throw new ArgumentOutOfRangeException("Invalid selection. Please choose between 1 to 5.");
-                        }
-                    }
-
-                    isValidType = true;
+                    userSelection = int.Parse(userInput);
+                    isValidType = checkForValidInput(userSelection, i_MinValue, i_MaxValue);
                 }
-
                 catch (FormatException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    System.Console.WriteLine("Please enter a number!" + ex.Message);
                 }
-                catch (ArgumentOutOfRangeException ex)
+                catch (ValueOutOfRangeException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    System.Console.WriteLine(ex.Message);
                 }
+               /* finally
+                {*/
+                    isValidType = true;
+               // }
+
             }
 
             return userSelection;
         }
 
-        internal static string GetLicensePlate()
+        private static bool checkForValidInput(int i_UserSelection, int i_MinValue, int i_MaxValue)
+        {
+            bool isValidType = false;
+            if (i_UserSelection >= i_MinValue && i_UserSelection <= i_MaxValue)
+            {
+                isValidType = true;
+            }
+            else
+            {
+                throw new ValueOutOfRangeException(i_MinValue, i_MaxValue);
+            }
+
+            return isValidType;
+        }
+
+        public static string GetLicensePlate()
         {
             Console.Clear();
             System.Console.WriteLine("Please enter the vehicle's license plate: ");
             return Console.ReadLine();
         }
+
+        public static string GetExistingVehicleLicensePlate()
+        {
+            bool isExists = false;
+            string licensePlateNumber = "";
+            while (!isExists)
+            {
+                try
+                {
+                    Console.WriteLine("Please enter the vehicle's license plate: ");
+                    licensePlateNumber = Console.ReadLine();
+                    isExists = Program.isVehicleInGarage(licensePlateNumber);
+                }
+
+                catch (KeyNotFoundException ex)
+                {
+                    Console.WriteLine("This license number is not in the garage: " + ex.Message);
+                }
+                
+             isExists = true;
+               
+            }
+            return licensePlateNumber;
+        }
+
+        public static string GetDetailsAboutVehicle(string i_DetailsType)
+        {
+            Console.Clear();
+            System.Console.WriteLine("Please enter the vehicle's " + i_DetailsType + ": ");
+            return Console.ReadLine();
+        }
+
+        public static string IsCarryingDangerousMaterials()
+        {
+            Console.Clear();
+            System.Console.WriteLine("Is the vehicle carrying dangerous materials? (Y/N): ");
+            return Console.ReadLine();
+        }
+
+        internal static Dictionary<string, object> ValidateAndGetVehicleDetails(Dictionary<string, object> vehicleDetails)
+        {
+            Dictionary<string, object> validatedVehicleDetails = new Dictionary<string, object>();
+
+            foreach (KeyValuePair<string, object> detail in vehicleDetails)
+            {
+                switch (detail.Key)
+                {
+                    case "VehicleType":
+                        GarageManager.eVehicleType vehicleType = GetVehicleType(detail.Value);
+                        validatedVehicleDetails.Add("VehicleType", vehicleType);
+                        break;
+
+                    case "OwnerName":
+                        string ownerName = (string)detail.Value;
+                        if (ownerName.Length > 0)
+                        {
+                            validatedVehicleDetails.Add("OwnerName", ownerName);
+                        }
+                        else
+                        {
+                            throw new FormatException("Owner name cannot be empty!");
+                        }
+                        break;
+
+                    case "OwnerPhoneNumber":
+                        int.Parse((string)detail.Value);
+                        validatedVehicleDetails.Add("OwnerPhoneNumber", detail.Value);
+                        break;
+
+                    case "CurrentEnergy":
+                        float.Parse((string)detail.Value);
+                        validatedVehicleDetails.Add("CurrentEnergy", detail.Value); // NEED TO BE VALIDATED (!!!)
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return validatedVehicleDetails;
+        }
+
+        private static GarageManager.eVehicleType GetVehicleType(object i_TypeAsString)
+        {
+            int vehicleTypeAsInt = (int)i_TypeAsString;
+            GarageManager.eVehicleType vehicleType;
+
+            if (vehicleTypeAsInt == 1)
+            {
+                vehicleType = GarageManager.eVehicleType.GasCar;
+            }
+            else if (vehicleTypeAsInt == 2)
+            {
+                vehicleType = GarageManager.eVehicleType.ElectricCar;
+            }
+            else if (vehicleTypeAsInt == 3)
+            {
+                vehicleType = GarageManager.eVehicleType.GasMotorcycle;
+            }
+            else if (vehicleTypeAsInt == 4)
+            {
+                vehicleType = GarageManager.eVehicleType.ElectricMotorcycle;
+            }
+            else if (vehicleTypeAsInt == 5)
+            {
+                vehicleType = GarageManager.eVehicleType.Truck;
+            }
+            else
+            {
+                throw new ValueOutOfRangeException(1, 5);
+            }
+
+            return vehicleType;
+        }
     }
+
+
+
+
+
 }
+
