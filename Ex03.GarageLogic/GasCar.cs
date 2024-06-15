@@ -6,29 +6,27 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class GasCar : Car, IGasVehicle
+    public class GasCar : GasVehicle
     {
+        private eCarColors m_CarColors;
+        private eNumOfDoors m_NumOfDoors;
+        public GasCar()
+        {
+            MaxGasAmount = 45f;
+            GasType = eGasType.Octan95;
+        }
         
-        public eGasType GasType
+        public eCarColors CarColors
         {
-            get { return eGasType.Octan95; }
+            get { return m_CarColors; }
+            set { m_CarColors = value; }
         }
 
-        public float GetCurrentGasAmount
+        public eNumOfDoors NumOfDoors
         {
-            get { return EnergyLeftPercents; }
+            get { return m_NumOfDoors; }
+            set { m_NumOfDoors = value; }
         }
-
-        public float GetMaxGasAmount
-        {
-            get { return 45f; }
-        }
-
-        void IGasVehicle.Fuel(float i_GasAmountToAdd, eGasType i_GasType)
-        {
-
-        }
-
-
+ 
     }
 }

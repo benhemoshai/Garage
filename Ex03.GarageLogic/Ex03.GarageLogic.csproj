@@ -40,16 +40,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Car.cs" />
     <Compile Include="ElectricCar.cs" />
     <Compile Include="ElectricMotorcycle.cs" />
+    <Compile Include="ElectricVehicle.cs" />
     <Compile Include="GarageExceptions.cs" />
     <Compile Include="GarageManager.cs" />
     <Compile Include="GasCar.cs" />
     <Compile Include="GasMotorcycle.cs" />
-    <Compile Include="IElectricVehicle.cs" />
-    <Compile Include="IGasVehicle.cs" />
-    <Compile Include="Motorcycle.cs" />
+    <Compile Include="GasVehicle.cs" />
     <Compile Include="Truck.cs" />
     <Compile Include="Vehicle.cs" />
     <Compile Include="Wheel.cs" />

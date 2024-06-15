@@ -11,8 +11,7 @@ namespace Ex03.ConsoleUI
     {
         // private const int MENU_CHOICES = 8;
 
-
-        internal static int getUserSelectionFromMenu(int i_MinValue, int i_MaxValue)
+        public static int getUserSelectionFromMenu(int i_MinValue, int i_MaxValue)
         {
             bool isValidType = false;
             int userSelection = 0;
@@ -33,11 +32,6 @@ namespace Ex03.ConsoleUI
                 {
                     System.Console.WriteLine(ex.Message);
                 }
-               /* finally
-                {*/
-                    isValidType = true;
-               // }
-
             }
 
             return userSelection;
@@ -58,40 +52,9 @@ namespace Ex03.ConsoleUI
             return isValidType;
         }
 
-        public static string GetLicensePlate()
-        {
-            Console.Clear();
-            System.Console.WriteLine("Please enter the vehicle's license plate: ");
-            return Console.ReadLine();
-        }
-
-        public static string GetExistingVehicleLicensePlate()
-        {
-            bool isExists = false;
-            string licensePlateNumber = "";
-            while (!isExists)
-            {
-                try
-                {
-                    Console.WriteLine("Please enter the vehicle's license plate: ");
-                    licensePlateNumber = Console.ReadLine();
-                    isExists = Program.isVehicleInGarage(licensePlateNumber);
-                }
-
-                catch (KeyNotFoundException ex)
-                {
-                    Console.WriteLine("This license number is not in the garage: " + ex.Message);
-                }
-                
-             isExists = true;
-               
-            }
-            return licensePlateNumber;
-        }
-
         public static string GetDetailsAboutVehicle(string i_DetailsType)
         {
-            Console.Clear();
+            // Console.Clear();
             System.Console.WriteLine("Please enter the vehicle's " + i_DetailsType + ": ");
             return Console.ReadLine();
         }
@@ -178,11 +141,28 @@ namespace Ex03.ConsoleUI
 
             return vehicleType;
         }
+
+        public static float GetEnergyAmountToAdd()
+        {
+            bool isValidEnergy = false;
+            float energyToAdd = 0;
+            while (!isValidEnergy)
+            {
+                try
+                {
+                    Console.WriteLine("Enter the amount of energy you want to add: ");
+                    energyToAdd = float.Parse(Console.ReadLine());
+                    isValidEnergy = true;
+                }
+
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+            return energyToAdd;
+        }
     }
 
-
-
-
-
-}
-
+ }

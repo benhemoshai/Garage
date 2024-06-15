@@ -7,16 +7,44 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public abstract class Vehicle
+    public class Vehicle
     {
         private string m_ModelName;
         private string m_LicenseID;
-        private float m_EnergyLeft;
+        private float m_EnergyLeftPercentage;
         private Wheel[] m_Wheels;
 
         private string m_Owner;
         private string m_OwnerPhoneNumber;
         private eVehicleStatus m_VehicleStatus;
+
+        public Vehicle()
+        {
+            int numberOfWheels = 0;
+            float maxAirPressure = 0;
+
+            if (this is GasMotorcycle || this is ElectricMotorcycle)
+            {
+                numberOfWheels = 2;
+                maxAirPressure = 33;
+            }
+            else if (this is GasCar || this is ElectricCar)
+            {
+                numberOfWheels = 5;
+                maxAirPressure = 31;
+            }
+            else if (this is Truck)
+            {
+                numberOfWheels = 12;
+                maxAirPressure = 28;
+            }
+
+            m_Wheels = new Wheel[numberOfWheels];
+            for (int i = 0; i < m_Wheels.Length; i++)
+            {
+                m_Wheels[i] = new Wheel(maxAirPressure);
+            }
+        }
 
         public string ModelName
         {
@@ -30,10 +58,10 @@ namespace Ex03.GarageLogic
             set { m_LicenseID = value; }
         }
 
-        public float EnergyLeftPercents
+        public float EnergyLeftPrecentage
         {
-            get { return m_EnergyLeft; }
-            set { m_EnergyLeft = value; }
+            get { return m_EnergyLeftPercentage; }
+            set { m_EnergyLeftPercentage = value; }
         }
 
         public Wheel[] Wheels
@@ -59,6 +87,13 @@ namespace Ex03.GarageLogic
             set { m_VehicleStatus = value; }
         }
 
+        public enum eLicenseType
+        {
+            A,
+            A1,
+            AA,
+            B1
+        }
 
         public enum eVehicleStatus
         {
@@ -67,19 +102,19 @@ namespace Ex03.GarageLogic
             Paid
         }
 
-        public override bool Equals(object obj)
+        public enum eCarColors
         {
-            bool isEqual = false;
-            try
-            {
-                isEqual = m_LicenseID.Equals(((Vehicle)obj).LicenseID);
-            }
-            catch (Exception ex)
-            {
-                isEqual = false;
-            }
-            return isEqual;
-
+            Yellow,
+            White,
+            Red,
+            Black
+        }
+        public enum eNumOfDoors
+        {
+            Two,
+            Three,
+            Four,
+            Five
         }
     }
 }

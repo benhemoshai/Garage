@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,53 +11,139 @@ using Ex03.GarageLogic;
 namespace Ex03.ConsoleUI
 {
 
+
+
     public class Program
     {
-        private static GarageManager s_GarageManager;
+        private static GarageManager s_GarageManager = new GarageManager();
+
         public static void Main()
         {
-            s_GarageManager = new GarageManager();
+
             s_GarageManager.addVehicleToGarage();
 
-            DisplayMainMenu();
-            int userFuncionalityChoice = InputValidator.getUserSelectionFromMenu(1,8);
-
-            if (userFuncionalityChoice == 1)
+            Display.DisplayMainMenu();
+            try
             {
+                int userChoiceFromMenu = InputValidator.getUserSelectionFromMenu(1, 8);
 
-             /*   // Ask for vehicle license plate
-                string licensePlate = InputValidator.GetLicensePlate();
-
-                // Check if the vehicle is already in the garage
-                if (isVehicleInGarage(licensePlate))
+                switch (userChoiceFromMenu)
                 {
-                    Console.WriteLine("Vehicle is already in the garage!");
-                    Console.WriteLine("Vehicle status changed to 'InFix'");
-                    s_GarageManager.VehicelsInGarage[licensePlate].VehicleStatus = Vehicle.eVehicleStatus.InFix;
+                    case 1:
+                        InsertNewVehicle();
+                        break;
+                    case 2:
+                        Display.DisplayFilterOptions();
+                        FilterCurrentLicensePlates();
+                        break;
+                    case 3:
+                        ChangeVehicleState();
+                        break;
+
+                    case 4:
+                        InflateVehicleWheels();
+                        break;
+
+                    case 5:
+                        FuelGasVehicle();
+                        break;
+
+                    case 6:
+                        ChargeBattery();
+                        break;
+
+                    case 7:
+                        PrintVehicleDetails();
+                        break; 
+
+                    default:
+                        break;
                 }
-                else
-                {
-                    Console.WriteLine("Vehicle is new!");
-                    DisplayVehicleOptions();
-                    int vehicleType = InputValidator.getUserSelectionFromMenu(1,5);
-                }*/
+
 
             }
-            else if (userFuncionalityChoice == 2)
+            catch (FormatException ex)
             {
-                DisplayFilterOptions();
-                DisplayCurrentLicensePlates();
+                System.Console.WriteLine("Please enter a number!" + ex.Message);
             }
-
-            else if (userFuncionalityChoice == 3)
+            catch (ValueOutOfRangeException ex)
             {
-                //DisplayChangeStateOfVehicle();
-                ChangeVehicleState();
-
+                System.Console.WriteLine(ex.Message);
             }
-            Console.ReadLine();
+            finally
+            {
+                Console.WriteLine("Goodbye!");
+            }
         }
 
+        private static void PrintVehicleDetails()
+        {
+            string licensePlate = GetExistingVehicleLicensePlate();
+            PrintVehicleDetails(licensePlate);
+        }
+
+        private static void PrintVehicleDetails(string i_LicensePlate)
+        {
+            Vehicle vehicle = s_GarageManager.VehicelsInGarage[i_LicensePlate];
+            Console.WriteLine(
+@"####################################################
+These are the vehicle details: 
+
+License number: {0}
+Model name: {1}
+Owner's name: {2}
+Owner's phone number: {3}
+
+Vehicle's status: {4}
+
+Wheels status: {5}"
+);
+            if (vehicle is GasCar)
+            {
+                GasCar gascar = vehicle as GasCar;
+                Console.WriteLine(
+@"Gas type: {0}
+Gas left in the tank: {1}
+Car color: {2}
+Number of doors: {3}"
+);
+            }
+            else if (vehicle is GasMotorcycle)
+            {
+                Console.WriteLine(
+@"Gas type: {0}
+Gas left in the tank: {1}
+License type: {2}
+Engine's volume: {3}"
+);
+            }
+            else if(vehicle is ElectricMotorcycle)
+            {
+                Console.WriteLine(
+@"Battery left: {0}
+License type: {1}
+Engine's volume: {2}"
+);
+            }
+            else if (vehicle is ElectricCar)
+            {
+                Console.WriteLine(
+@"Battery left: {0}
+Car color: {2}
+Number of doors: {3}"
+);
+            }
+            else
+            {
+                Console.WriteLine(
+@"Gas type: {0}
+Gas left in the tank: {1}
+Does it carry dangerous materials: {2}
+Cargo's volume: {3}"
+);
+            }
+
+        }
 
         private static void InsertNewVehicle()
         {
@@ -74,19 +162,17 @@ namespace Ex03.ConsoleUI
             else
             {
                 Console.WriteLine("Vehicle is new!");
-                DisplayVehicleOptions();
+                Display.DisplayVehicleOptions();
 
                 string vehicleType = InputValidator.getUserSelectionFromMenu(1, 5).ToString();
                 vehicleDetails.Add("VehicleType", vehicleType);
 
-                // Ask for owner name and phone number
                 string ownerName = InputValidator.GetDetailsAboutVehicle("Owner Name");
                 vehicleDetails.Add("OwnerName", ownerName);
 
                 string ownerPhoneNumber = InputValidator.GetDetailsAboutVehicle("Owner Phone Number");
                 vehicleDetails.Add("OwnerPhoneNumber", ownerPhoneNumber);
 
-                // Ask for vehicle details
                 string vehicleCurrentEnergy = InputValidator.GetDetailsAboutVehicle("Energy");
                 vehicleDetails.Add("CurrentEnergy", vehicleCurrentEnergy);
 
@@ -118,7 +204,6 @@ namespace Ex03.ConsoleUI
                     vehicleDetails.Add("IsCarryingDangerousMaterials", isCarryingDangerousMaterials);
                 }
 
-
                 try
                 {
                     Dictionary<string, object> validatedVehicleDetails = InputValidator.ValidateAndGetVehicleDetails(vehicleDetails);
@@ -135,46 +220,21 @@ namespace Ex03.ConsoleUI
             }
         }
 
-
-        private static void ChangeVehicleState()
+        public static bool isVehicleInGarage(string i_LicensePlate)
         {
-            Vehicle.eVehicleStatus status = Vehicle.eVehicleStatus.InFix;
-            try
+            bool isVehicleInGarage = false;
+            if (s_GarageManager.IsVehicleInGarage(i_LicensePlate))
             {
-                string licensePlate = InputValidator.GetExistingVehicleLicensePlate();
-                DisplayVehicleStates();
-                int vehicleState = InputValidator.getUserSelectionFromMenu(1, 3);
-
-                switch (vehicleState)
-                {
-                    case 1:
-                        status = Vehicle.eVehicleStatus.InFix;
-                        break;
-
-                    case 2:
-                        status = Vehicle.eVehicleStatus.Fixed;
-                        break;
-
-                    case 3:
-                        status = Vehicle.eVehicleStatus.Paid;
-                        break;
-
-                    default:
-                        break;
-                }
-
-                s_GarageManager.VehicelsInGarage[licensePlate].VehicleStatus = status;
+                isVehicleInGarage = true;
             }
-            catch (KeyNotFoundException ex)
+            else
             {
-                Console.WriteLine("This license number is not in the garage: " + ex.Message);
+                throw new ArgumentException(string.Format("Vehicle with license plate {0} is not in the garage!", i_LicensePlate));
             }
+            return isVehicleInGarage;
         }
-           
-        
 
-
-        private static void DisplayCurrentLicensePlates()
+        private static void FilterCurrentLicensePlates()
         {
             Vehicle.eVehicleStatus status = Vehicle.eVehicleStatus.InFix;
             List<string> licenseIDS = new List<string>();
@@ -224,92 +284,207 @@ namespace Ex03.ConsoleUI
         }
 
 
-        public static bool isVehicleInGarage(string i_LicensePlate)
+        private static void ChangeVehicleState()
         {
-            bool isVehicleInGarage = false;
-            if (s_GarageManager.IsVehicleInGarage(i_LicensePlate))
+            Vehicle.eVehicleStatus status = Vehicle.eVehicleStatus.InFix;
+
+            string licensePlate = GetExistingVehicleLicensePlate();
+            Display.DisplayVehicleStates();
+            int vehicleState = InputValidator.getUserSelectionFromMenu(1, 3);
+
+            switch (vehicleState)
             {
-                isVehicleInGarage = true;
+                case 1:
+                    status = Vehicle.eVehicleStatus.InFix;
+                    break;
+
+                case 2:
+                    status = Vehicle.eVehicleStatus.Fixed;
+                    break;
+
+                case 3:
+                    status = Vehicle.eVehicleStatus.Paid;
+                    break;
+            }
+
+            s_GarageManager.VehicelsInGarage[licensePlate].VehicleStatus = status;
+        }
+
+
+        private static void InflateVehicleWheels()
+        {
+            string licensePlate = GetExistingVehicleLicensePlate();
+            Display.DisplayInflateOptions();
+            int userChoice = InputValidator.getUserSelectionFromMenu(1, 2);
+
+            switch (userChoice)
+            {
+                case 1:
+
+                    int numberOfWheel = 1;
+
+                    foreach (Wheel wheel in s_GarageManager.VehicelsInGarage[licensePlate].Wheels)
+                    {
+                        float airPressureToAdd = wheel.MaxAirPressure - wheel.CurrentAirPressure;
+                        //float airPressureToAdd = 30f; // to check if it handles wrong amount of air pressure
+
+                        try
+                        {
+                            wheel.Inflate(airPressureToAdd);
+                            Console.WriteLine("Great, the air pressure in wheel number {0} is now: {1}", numberOfWheel++ ,wheel.CurrentAirPressure);
+                        }
+                        catch (ValueOutOfRangeException ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+
+                    break;
+
+                case 2: // add the option to return to the main menu
+                    break;
+
+            }
+        }
+
+        private static void FuelGasVehicle()
+        {
+            bool isValidVehicleType = false;
+            bool isValidGas = false;
+
+            while (!isValidVehicleType || !isValidGas)
+            {
+                try
+                {
+                    string licensePlate = GetExistingVehicleLicensePlate();
+                    isValidVehicleType = CheckVehicleType(licensePlate,"GasVehicle");
+                    GasVehicle gasVehicle = s_GarageManager.VehicelsInGarage[licensePlate] as GasVehicle;
+
+                    Display.DisplayGasTypes();
+
+                    int chosenGasType = InputValidator.getUserSelectionFromMenu(1, 4);
+
+                    GasVehicle.eGasType gasType = GasVehicle.eGasType.Soler; //initialize the gasType object
+
+                    switch (chosenGasType)
+                    {
+                        case 1:
+                            gasType = GasVehicle.eGasType.Soler; 
+                            break;
+                        case 2:
+                            gasType = GasVehicle.eGasType.Octan95;
+                            break;
+                        case 3:
+                            gasType = GasVehicle.eGasType.Octan96;
+                            break;
+                        case 4:
+                            gasType = GasVehicle.eGasType.Octan98;
+                            break;
+
+                    }
+
+                    float gasAmountToAdd = InputValidator.GetEnergyAmountToAdd();
+
+                    gasVehicle.Fuel(gasAmountToAdd, gasType);
+
+                    isValidGas = true;
+                    Console.WriteLine("Successfully fueled the vehicle");
+                }
+                catch (ArgumentException ex) 
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (ValueOutOfRangeException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+        }
+
+
+        private static void ChargeBattery()
+        {
+            bool isValidVehicleType = false;
+            bool isValidAmountOfBattery = false;
+      
+            while (!isValidVehicleType || !isValidAmountOfBattery)
+            {
+                try
+                {
+                    string licensePlate = GetExistingVehicleLicensePlate();
+                    isValidVehicleType = CheckVehicleType(licensePlate, "ElectricVehicle");
+                    ElectricVehicle electricVehicle = s_GarageManager.VehicelsInGarage[licensePlate] as ElectricVehicle;
+
+                    float BatteryAmountToAdd = InputValidator.GetEnergyAmountToAdd();
+
+                    electricVehicle.ChargeBattery(BatteryAmountToAdd);
+
+                    isValidAmountOfBattery = true;
+                    Console.WriteLine("Successfully charged the vehicle");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (ValueOutOfRangeException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+        }
+    
+
+
+        private static bool CheckVehicleType(string i_LicensePlate, string i_TypeOfVehicle) // check again
+        {
+            bool isValidVehicleType = false;
+            if (i_TypeOfVehicle.Equals("GasVehicle"))
+            {
+                if (s_GarageManager.VehicelsInGarage[i_LicensePlate] is GasVehicle)
+                {
+                    isValidVehicleType = true;
+                }
+                else
+                {
+                    throw new ArgumentException("The license plate you gave is not a Gas Vehicle");
+                }
             }
             else
             {
-                throw new KeyNotFoundException(i_LicensePlate);
+                if (s_GarageManager.VehicelsInGarage[i_LicensePlate] is ElectricVehicle)
+                {
+                    isValidVehicleType = true;
+                }
+                else
+                {
+                    throw new ArgumentException("The license plate you gave is not an Electric Vehicle");
+                }
             }
-            return isVehicleInGarage;
+            return isValidVehicleType;
         }
-        private static void DisplayMainMenu()
+
+
+        public static string GetExistingVehicleLicensePlate()
+        {
+            bool isExists = false;
+            string licensePlateNumber = "";
+            while (!isExists)
             {
-                Console.Clear();
-                Console.WriteLine(
+                try
+                {
+                    licensePlateNumber = InputValidator.GetDetailsAboutVehicle("License Plate");
+                    isExists = s_GarageManager.IsVehicleInGarage(licensePlateNumber);
+                }
 
-    @"####################################################
-Hello and welcome to the garage!
-####################################################
-Choose an action from the following list:
-####################################################
-(1) - Insert a new vehicle to the garage
-(2) - Display a list of license plates in the garage
-(3) - Change a vehicle's status
-(4) - Inflate a vehicle's wheels to maximum
-(5) - Refuel a vehicle
-(6) - Charge an electric vehicle
-(7) - Display a vehicle's full details
-(8) - Exit the garage
-####################################################
-");
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
             }
-
-        private static void DisplayVehicleOptions()
-        {
-
-            Console.Clear();
-            Console.WriteLine(
-@"Enter the vehicle type:
-(1) - Gas car 
-(2) - Electric car 
-(3) - Motorcycle on gas
-(4) - Electric Motorcycle
-(5) - Truck");
-
+            return licensePlateNumber;
         }
-
-        private static void DisplayFilterOptions()
-        {
-            Console.Clear();
-            Console.WriteLine(
-@"Choose which license plates do you want to see:
-(1) - All vehicles
-(2) - InFix vehicles 
-(3) - Fixed vehicles
-(4) - Paid vehicles
-");
-        }
-
-        public static void DisplayVehicleStates()
-        {
-            Console.WriteLine(
-@"Enter the new vehicle's state:  
-(1) - InFix 
-(2) - Fixed 
-(3) - Paid
-");
-        }
-
-        private static void DisplayChangeStateOfVehicle()
-        {
-            Console.Clear();
-            Console.WriteLine(
-@"In order to change the state of a vehicle, 
-you need to enter the License number and the desired State.");
-        }
-
-        private static void AskForVehicleStatus()
-            {
-                Console.Clear();
-                Console.WriteLine("");
-            }
-
-
-
     }
 }

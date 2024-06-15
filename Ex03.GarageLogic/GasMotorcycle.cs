@@ -3,32 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Ex03.GarageLogic.Car;
-using static Ex03.GarageLogic.Motorcycle;
 using static Ex03.GarageLogic.Vehicle;
 
 namespace Ex03.GarageLogic
 {
-    class GasMotorcycle : Motorcycle, IGasVehicle
+    public class GasMotorcycle : GasVehicle
     {
-        public eGasType GasType
+        public GasMotorcycle()
         {
-            get { return eGasType.Octan98; }
-        }
-
-        public float GetCurrentGasAmount
-        {
-            get { return EnergyLeftPercents; }
-        }
-
-        public float GetMaxGasAmount
-        {
-            get { return 5.5f; }
-        }
-
-        void IGasVehicle.Fuel(float i_GasAmountToAdd, eGasType i_GasType)
-        {
-
+            MaxGasAmount = 5.5f;
+            GasType = eGasType.Octan98;
         }
 
     }
