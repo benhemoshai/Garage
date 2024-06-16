@@ -9,94 +9,49 @@ namespace Ex03.GarageLogic
 
     public class GarageManager
     {
-
-        private Dictionary<string, Vehicle> m_VehiclesInGarage = new Dictionary<string, Vehicle>();
-        public Dictionary<string, Vehicle> VehicelsInGarage
+        /*static void Main()
         {
-            get { return m_VehiclesInGarage; }
-            set { m_VehiclesInGarage = value; }
-        }
+            GarageManager garageManager = new GarageManager();
+            garageManager.AddVehicleToGarage("1234");
+            
+        }*/
+        public List<Vehicle> m_VehiclesInGarage = new List<Vehicle>();
 
-        public void addVehicleToGarage()
+        public void AddVehicleToGarage(string i_LicensePlateNumber)
         {
-            GasCar car = new GasCar();
-            car.LicenseID = "175399";
-            m_VehiclesInGarage.Add(car.LicenseID, car);
-
-            ElectricCar tesla = new ElectricCar();
-            tesla.LicenseID = "1234";
-            m_VehiclesInGarage.Add(tesla.LicenseID, tesla);
-            m_VehiclesInGarage[tesla.LicenseID].Wheels[0].CurrentAirPressure = 30;
-            m_VehiclesInGarage[tesla.LicenseID].Wheels[1].CurrentAirPressure = 30;
-            m_VehiclesInGarage[tesla.LicenseID].Wheels[2].CurrentAirPressure = 30;
-
-        }
-
-        /*
-                public static void Main()
-                {
-                    *//*GasCar hyundai = new GasCar("i-10", "17422111", "Shai Ben Hemo", "0500000000", Vehicle.eVehicleStatus.InFix, Car.eCarColor.White, Car.eNumOfDoors.Four);
-                    Truck tetra = new Truck("scania", "1112222", "Bar Azulay", "0540000000", Vehicle.eVehicleStatus.Paid, true, 100f);
-                    hyundai.ModelName = "i-20";
-
-                    ElectricMotorcycle suzuki = new ElectricMotorcycle("R750", "1132222", "Ben", "000000000", Vehicle.eVehicleStatus.Fixed, Motorcycle.eLicenseType.AA, 750);
-                    Console.WriteLine(suzuki.Equals(tetra));*//*
-                    //print all the details about the car
-
-                    GasCar toyota = new GasCar();
-                    toyota.ModelName = "corolla";
-                    toyota.CarColor = Car.eCarColor.White;
-                    toyota.EnergyLeftPercents = 30;
-                    toyota.Owner = "Shai";
-                    toyota.LicenseID = "175399";
-
-                }
-        */
-        public bool IsVehicleInGarage(string i_LicenseID)
-        {
-            bool isVehicleInGarage = false;
-
-            foreach (string licensePlate in m_VehiclesInGarage.Keys)
-            {
-                if (licensePlate.Equals(i_LicenseID))
-                {
-                    isVehicleInGarage = true;
-                    break;
-                }
-
-            }
-            if (isVehicleInGarage == false)
-            {
-                throw new ArgumentException("Vehicle is not in the garage!");
-            }
-            return isVehicleInGarage;
-        }
+            Vehicle vehicle = new Car(eEngineType.Gas);
+            vehicle.LicensePlateNumber = i_LicensePlateNumber;
+            m_VehiclesInGarage.Add(vehicle);
 /*
-            foreach (Vehicle vehicle in m_VehiclesInGarage.Values)
-            {
-                if (vehicle.LicenseID.Equals(i_LicenseID))
-                {
-                    isVehicleInGarage = true;
-                    break;
-                }
-                else
-                {
-                    throw new ArgumentException("Vehicle is not in the garage!");
-                }
-            }
+            Motorcycle suzuki = new Motorcycle(Vehicle.eEngineType.Gas);
+            suzuki.ModelName = "R750";
+            m_VehiclesInGarage.Add(suzuki);
 
-            return isVehicleInGarage;*/
- 
+            Truck scania = new Truck();
+            scania.VehicleStatus = Vehicle.eVehicleStatus.Paid;
+            scania.IsCarryingDangerousMaterials = true;
+            m_VehiclesInGarage.Add(scania);*/
 
-        public enum eVehicleType
-        {
-            GasCar,
-            ElectricCar,
-            GasMotorcycle,
-            ElectricMotorcycle,
-            Truck
         }
 
+        public Vehicle FindVehicleByLicensePlate(string i_LicensePlateNumber)
+        {
+            Vehicle vehicle = null;
+            foreach (Vehicle vehicleInGarage in m_VehiclesInGarage)
+            {
+                if (vehicleInGarage.LicensePlateNumber == i_LicensePlateNumber)
+                {
+                    vehicle = vehicleInGarage;
+                    break;
+                }
+            }
+            if (vehicle == null)
+            {
+                throw new ArgumentException("This vehicle is not in the garage!");
+            }
+
+            return vehicle;
+        }
     }
 
 }

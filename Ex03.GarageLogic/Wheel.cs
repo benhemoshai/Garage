@@ -6,32 +6,41 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
+
     public class Wheel
     {
-        private string m_ManufacturerName;
+        public float MaxAirPressure { get; set; }
+
         private float m_CurrentAirPressure;
-        private float m_MaxAirPressure;
 
         public Wheel(float i_MaxAirPressure)
         {
-            m_MaxAirPressure = i_MaxAirPressure;
+            MaxAirPressure = i_MaxAirPressure;
         }
-
-        public string ManufacturerName
-        {
-            get { return m_ManufacturerName; }
-            set { m_ManufacturerName = value; }
-        }
+        public string ManufacturerName { get; set; }
         public float CurrentAirPressure
         {
             get { return m_CurrentAirPressure; }
-            set { m_CurrentAirPressure = value; }
+            set
+            {
+                if (value <= MaxAirPressure)
+                {
+                    m_CurrentAirPressure = value;
+                }
+                else
+                {
+                    throw new ValueOutOfRangeException(0, MaxAirPressure);
+                }
+            }
         }
-        public float MaxAirPressure
+
+        /*public float MaxAirPressure
         {
             get { return m_MaxAirPressure; }
-            set { m_MaxAirPressure = value; } // not sure if we need
-        }
+            set { m_MaxAirPressure = value; }
+        }*/
+
+
         public void Inflate(float i_AmountOfAirPressureToAdd)
         {
             if (CurrentAirPressure + i_AmountOfAirPressureToAdd <= MaxAirPressure)
@@ -42,7 +51,11 @@ namespace Ex03.GarageLogic
             {
                 throw new ValueOutOfRangeException(0, MaxAirPressure - CurrentAirPressure);
             }
-            
+        }
+
+        public void InflateWheelToMax()
+        {
+            Inflate(MaxAirPressure - CurrentAirPressure);
         }
     }
 }

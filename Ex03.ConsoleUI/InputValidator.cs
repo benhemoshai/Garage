@@ -66,7 +66,7 @@ namespace Ex03.ConsoleUI
             return Console.ReadLine();
         }
 
-        internal static Dictionary<string, object> ValidateAndGetVehicleDetails(Dictionary<string, object> vehicleDetails)
+       /* internal static Dictionary<string, object> ValidateAndGetVehicleDetails(Dictionary<string, object> vehicleDetails)
         {
             Dictionary<string, object> validatedVehicleDetails = new Dictionary<string, object>();
 
@@ -107,9 +107,9 @@ namespace Ex03.ConsoleUI
             }
 
             return validatedVehicleDetails;
-        }
+        }*/
 
-        private static GarageManager.eVehicleType GetVehicleType(object i_TypeAsString)
+       /* private static GarageManager.eVehicleType GetVehicleType(object i_TypeAsString)
         {
             int vehicleTypeAsInt = (int)i_TypeAsString;
             GarageManager.eVehicleType vehicleType;
@@ -140,7 +140,7 @@ namespace Ex03.ConsoleUI
             }
 
             return vehicleType;
-        }
+        }*/
 
         public static float GetEnergyAmountToAdd()
         {

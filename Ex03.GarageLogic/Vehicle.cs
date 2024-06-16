@@ -7,114 +7,73 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public class Vehicle
+    public abstract class Vehicle
     {
-        private string m_ModelName;
-        private string m_LicenseID;
-        private float m_EnergyLeftPercentage;
-        private Wheel[] m_Wheels;
+        public string ModelName { get; set; }
+        public string LicensePlateNumber { get; set; }
+        public float EnergyLeftPrecentage { get; set; }
+        public Wheel[] Wheels { get; set; }
+        public string OwnerName { get; set; }
+        public string OwnerPhoneNumber { get; set; }
+        public eVehicleStatus VehicleStatus { get; set; }
+        public Engine VehicleEngine { get; set; }
+        public eVehicleType VehicleType { get; set; }
 
-        private string m_Owner;
-        private string m_OwnerPhoneNumber;
-        private eVehicleStatus m_VehicleStatus;
+        //public eEngineType EngineType { get; set; }
 
-        public Vehicle()
+
+
+        public Vehicle(int i_NumOfWheels, float i_MaxAirPressure)
         {
-            int numberOfWheels = 0;
-            float maxAirPressure = 0;
-
-            if (this is GasMotorcycle || this is ElectricMotorcycle)
+            VehicleStatus = eVehicleStatus.InFix;
+            Wheels = new Wheel[i_NumOfWheels];
+            for (int i = 0; i < i_NumOfWheels; i++)
             {
-                numberOfWheels = 2;
-                maxAirPressure = 33;
-            }
-            else if (this is GasCar || this is ElectricCar)
-            {
-                numberOfWheels = 5;
-                maxAirPressure = 31;
-            }
-            else if (this is Truck)
-            {
-                numberOfWheels = 12;
-                maxAirPressure = 28;
-            }
-
-            m_Wheels = new Wheel[numberOfWheels];
-            for (int i = 0; i < m_Wheels.Length; i++)
-            {
-                m_Wheels[i] = new Wheel(maxAirPressure);
+                Wheels[i] = new Wheel(i_MaxAirPressure);
             }
         }
 
-        public string ModelName
+        public void InflateWheelsToMax() // MAYBE MOVE TO WHEELS CLASS
         {
-            get { return m_ModelName; }
-            set { m_ModelName = value; }
+            foreach (Wheel wheel in Wheels)
+            {
+                wheel.InflateWheelToMax();
+            }
         }
 
-        public string LicenseID
+        // Equals
+        public override bool Equals(object obj)
         {
-            get { return m_LicenseID; }
-            set { m_LicenseID = value; }
-        }
+            bool isEqual = false;
+            Vehicle vehicle = obj as Vehicle;
+            if (vehicle != null)
+            {
+                isEqual = LicensePlateNumber == vehicle.LicensePlateNumber;
+            }
 
-        public float EnergyLeftPrecentage
-        {
-            get { return m_EnergyLeftPercentage; }
-            set { m_EnergyLeftPercentage = value; }
+            return isEqual;
         }
-
-        public Wheel[] Wheels
-        {
-            get { return m_Wheels; }
-            set { m_Wheels = value; }
-        }
-
-        public string Owner
-        {
-            get { return m_Owner; }
-            set { m_Owner = value; }
-        }
-        public string OwnerPhoneNumber
-        {
-            get { return m_OwnerPhoneNumber; }
-            set { m_OwnerPhoneNumber = value; }
-        }
-
-        public eVehicleStatus VehicleStatus
-        {
-            get { return m_VehicleStatus; }
-            set { m_VehicleStatus = value; }
-        }
-
-        public enum eLicenseType
-        {
-            A,
-            A1,
-            AA,
-            B1
-        }
-
         public enum eVehicleStatus
         {
             InFix,
             Fixed,
             Paid
         }
-
-        public enum eCarColors
-        {
-            Yellow,
-            White,
-            Red,
-            Black
-        }
-        public enum eNumOfDoors
-        {
-            Two,
-            Three,
-            Four,
-            Five
-        }
     }
-}
+       
+
+        public enum eEngineType
+        {
+            Gas,
+            Electric
+        }
+
+        public enum eVehicleType
+        {
+            GasCar,
+            ElectricCar,
+            GasMotorcycle,
+            ElectricMotorcycle,
+            Truck
+   }
+ }

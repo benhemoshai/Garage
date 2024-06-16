@@ -3,30 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Ex03.GarageLogic.GarageManager;
 
 namespace Ex03.GarageLogic
 {
-    public class Truck : GasVehicle
+
+    public class Truck : Vehicle
     {
-        private bool m_HasDangerousMaterials;
-        private float m_CargoVolume;
+        public bool IsCarryingDangerousMaterials { get; set; }
+        public float CargoVolume { get; set; }
 
-        public Truck()
+        public const int m_NumOfWheels = 12;
+        public const int k_MaxAirPressure = 28;
+
+
+        public Truck() : base(m_NumOfWheels, k_MaxAirPressure)
         {
-            MaxGasAmount = 120f;
-            GasType = eGasType.Soler;
-        }
-        public bool HasDangerousMaterials
-        {
-            get { return m_HasDangerousMaterials; }
-            set { m_HasDangerousMaterials = value; }
+            GasEngine engine = new GasEngine();
+            engine.MaxEnergy = 120;
+            VehicleType = eVehicleType.Truck;
+            engine.GasType = eGasType.Soler;
         }
 
-        public float CargoVolume
-        {
-            get { return m_CargoVolume; }
-            set { m_CargoVolume = value; }
-        }
 
     }
 
