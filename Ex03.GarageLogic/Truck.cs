@@ -21,11 +21,12 @@ namespace Ex03.GarageLogic
         {
             GasEngine engine = new GasEngine();
             engine.MaxEnergy = 120;
-            VehicleType = eVehicleType.Truck;
-            engine.GasType = eGasType.Soler;
+            VehicleType = Enums.eVehicleType.Truck;
+            engine.GasType = Enums.eGasType.Soler;
         }
 
 
     }
+
 
 }

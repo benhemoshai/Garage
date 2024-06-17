@@ -8,8 +8,8 @@ namespace Ex03.GarageLogic
 {
     public class GasEngine : Engine
     {
-        public eGasType? GasType { get; set; }
-        public void Fuel(float i_GasAmountToAdd, eGasType i_GasType)
+        public Enums.eGasType GasType { get; set; }
+        public void Fuel(float i_GasAmountToAdd, Enums.eGasType i_GasType)
         {
             if (i_GasType == GasType)
             {
@@ -27,13 +27,5 @@ namespace Ex03.GarageLogic
                 throw new ArgumentException("Wrong gas type");
             }
         }
-    }
-
-    public enum eGasType
-    {
-        Soler,
-        Octan95,
-        Octan96,
-        Octan98
     }
 }

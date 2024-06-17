@@ -9,14 +9,16 @@ namespace Ex03.GarageLogic
     public class Engine
     {
         public float MaxEnergy { get; set; }
+
+        private float m_CurrentEnergy;
         public float CurrentEnergy
         {
-            get { return CurrentEnergy; }
+            get { return m_CurrentEnergy; }
             set
             {
                 if (value <= MaxEnergy)
                 {
-                    CurrentEnergy = value;
+                    m_CurrentEnergy = value;
                 }
                 else
                 {

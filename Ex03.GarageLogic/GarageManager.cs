@@ -17,21 +17,40 @@ namespace Ex03.GarageLogic
         }*/
         public List<Vehicle> m_VehiclesInGarage = new List<Vehicle>();
 
-        public void AddVehicleToGarage(string i_LicensePlateNumber)
+        public void AddVehicleToGarage(Vehicle vehicle)
         {
-            Vehicle vehicle = new Car(eEngineType.Gas);
+            m_VehiclesInGarage.Add(vehicle);
+        }
+       /* public void AddVehicleToGarage(string i_LicensePlateNumber)
+        {
+            Vehicle vehicle = new Car(Enums.eEngineType.Gas);
             vehicle.LicensePlateNumber = i_LicensePlateNumber;
             m_VehiclesInGarage.Add(vehicle);
-/*
-            Motorcycle suzuki = new Motorcycle(Vehicle.eEngineType.Gas);
-            suzuki.ModelName = "R750";
-            m_VehiclesInGarage.Add(suzuki);
+            *//*
+                        Motorcycle suzuki = new Motorcycle(Vehicle.eEngineType.Gas);
+                        suzuki.ModelName = "R750";
+                        m_VehiclesInGarage.Add(suzuki);
 
-            Truck scania = new Truck();
-            scania.VehicleStatus = Vehicle.eVehicleStatus.Paid;
-            scania.IsCarryingDangerousMaterials = true;
-            m_VehiclesInGarage.Add(scania);*/
+                        Truck scania = new Truck();
+                        scania.VehicleStatus = Vehicle.eVehicleStatus.Paid;
+                        scania.IsCarryingDangerousMaterials = true;
+                        m_VehiclesInGarage.Add(scania);*//*
 
+        }*/
+
+        public bool IsVehicleInGarage(string i_LicensePlateNumber)
+        {
+            bool isVehicleInGarage = false;
+            foreach (Vehicle vehicleInGarage in m_VehiclesInGarage)
+            {
+                if (vehicleInGarage.LicensePlateNumber == i_LicensePlateNumber)
+                {
+                    isVehicleInGarage = true;
+                    break;
+                }
+            }
+
+            return isVehicleInGarage;
         }
 
         public Vehicle FindVehicleByLicensePlate(string i_LicensePlateNumber)

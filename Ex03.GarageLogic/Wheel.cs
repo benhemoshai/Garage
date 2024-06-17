@@ -17,6 +17,7 @@ namespace Ex03.GarageLogic
         {
             MaxAirPressure = i_MaxAirPressure;
         }
+
         public string ManufacturerName { get; set; }
         public float CurrentAirPressure
         {
@@ -33,13 +34,6 @@ namespace Ex03.GarageLogic
                 }
             }
         }
-
-        /*public float MaxAirPressure
-        {
-            get { return m_MaxAirPressure; }
-            set { m_MaxAirPressure = value; }
-        }*/
-
 
         public void Inflate(float i_AmountOfAirPressureToAdd)
         {
